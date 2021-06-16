@@ -232,6 +232,7 @@ class TicTacToe extends React.Component {
                 </div>
                 <div  style={{}}>        
                     <Button
+                      disabled= {this.state.gameOver? "" : 'disabled'}
                       small
                       node="a"
       
