@@ -21,7 +21,7 @@
   margin-bottom: 0px;
   margin-left: 0px;
   margin-right: 0px;
-  width:280px;
+  width:300px;
 }
 
 .panel {
@@ -82,9 +82,8 @@ body {
 }
 
 
-.winner{
-  
-  border: 5px solid rgb(155, 3, 3);
+.winner {
+  border-left: 5px solid rgb(218, 18, 18);
 
 }
 

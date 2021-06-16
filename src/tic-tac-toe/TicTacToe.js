@@ -81,8 +81,13 @@ class TicTacToe extends React.Component {
   reset(){
 
     for(let x =0; x<=2; x++){
-      document.querySelectorAll('#row'+x).forEach(elem => elem.className = elem.className.replaceAll(" winner", "")); 
-      document.querySelectorAll('#column'+x).forEach(elem => elem.className = elem.className.replaceAll(" winner", "")); 
+      document.querySelectorAll('#row'+x).forEach(elem => 
+        {
+          //elem.querySelector('div').querySelector('div').className +=' winner'
+        
+          elem.querySelector('div').querySelector('div').className = elem.querySelector('div').querySelector('div').className.replaceAll(" winner", "")
+        }); 
+      document.querySelectorAll('#column'+x).forEach(elem => elem.querySelector('div').querySelector('div').className = elem.querySelector('div').querySelector('div').className.replaceAll(" winner", "")); 
     }
     
     this.setState({
@@ -112,14 +117,22 @@ class TicTacToe extends React.Component {
 
           if(this.evaluateTicRow(state.matrix[y], state.activeFigure)){
           
-            document.querySelectorAll('#row'+y).forEach(elem =>  elem.className +=' winner');
+            document.querySelectorAll('#row'+y).forEach(elem =>  {
+             
+               elem.querySelector('div').querySelector('div').className +=' winner';
+          
+          
+          
+          
+          
+          });
 
             over = true;
           }
 
           if(this.evaluateTicColumn(state.matrix, x, state.activeFigure)){
 
-            document.querySelectorAll('#column'+x).forEach(elem =>  elem.className +=' winner');
+            document.querySelectorAll('#column'+x).forEach(elem =>  elem.querySelector('div').querySelector('div').className +=' winner');
             over = true;
 
             
@@ -128,7 +141,7 @@ class TicTacToe extends React.Component {
           if(this.evaluateTicCornedDown(state.matrix, state.activeFigure)){
 
            
-            document.querySelectorAll('.diagonalDown').forEach(elem =>  elem.className +=' winner');
+            document.querySelectorAll('.diagonalDown').forEach(elem =>  elem.querySelector('div').querySelector('div').className +=' winner');
             console.log('evaluateTicCornedDown');
             over = true;
           }
@@ -136,7 +149,7 @@ class TicTacToe extends React.Component {
           if(this.evaluateTicCornedUp(state.matrix, state.activeFigure)){
 
            
-            document.querySelectorAll('.diagonalUp').forEach(elem =>  elem.className +=' winner');
+            document.querySelectorAll('.diagonalUp').forEach(elem =>  elem.querySelector('div').querySelector('div').className +=' winner');
          
             over = true;
           }
@@ -232,14 +245,14 @@ class TicTacToe extends React.Component {
                 </div>
                 <div  style={{}}>        
                     <Button
-                      disabled= {this.state.gameOver? "" : 'disabled'}
+                     
                       small
                       node="a"
       
                       waves="light"
                       onClick={this.reset}
                     >
-                    NEW GAME
+                    RESTART GAME
                     </Button>                
                 </div>
             </div>    
