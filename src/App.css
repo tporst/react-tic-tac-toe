@@ -1,5 +1,22 @@
+body, html {
+  height: 100%;
+}
+#root{
+  height: 100%; 
+}
+
+.TicTacToe{
+  margin-top: 100px;
+
+}
 .App {
   text-align: center;
+  background-image: url("bg3.png"); /* The image used */
+  background-color: #cccccc; /* Used if the image is unavailable */
+  height: 100%; /* You must set a specified height */
+  background-position: center; /* Center the image */
+  background-repeat: no-repeat; /* Do not repeat the image */
+  background-size: cover;
 }
 
 .App-logo {

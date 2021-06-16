@@ -17,7 +17,11 @@ function App() {
 
 
     <div className="App">
-      <TicTacToe test='tomasz'/>
+       <h1>Tic Tac Minecraft</h1>      
+       <div className="TicTacToe">
+         <TicTacToe />
+       </div>
+      
      
     </div>
   );

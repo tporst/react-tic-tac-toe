@@ -232,7 +232,7 @@ class TicTacToe extends React.Component {
     
     <div className="container console" >
       
-      <h1>Tic Tac Minecraft</h1>        
+       
 
       <div className="panel ">
            
