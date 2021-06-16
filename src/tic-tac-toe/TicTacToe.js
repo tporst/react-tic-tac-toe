@@ -37,7 +37,7 @@ class Brick extends React.Component {
             onClick={this.onTic}
         >       
           {hero}
-          {this.props.value}
+          
         </div>
       </div>
     )
@@ -217,14 +217,31 @@ class TicTacToe extends React.Component {
    
     return (
     
-    <div className="container" >
-              <h1>Tic Tac Minecraft</h1>
-             
-      <div className="panel">
-            
-            <div className="label">
-              Crafting
-            </div>  
+    <div className="container console" >
+      
+      <h1>Tic Tac Minecraft</h1>        
+
+      <div className="panel ">
+           
+           
+            <div className="flexcontainer" style={{width: '98%'}}>
+                <div className="label flexitemleft">
+                  Crafting
+                </div>
+                <div className="flexitemmid">
+                </div>
+                <div  style={{}}>        
+                    <Button
+                      small
+                      node="a"
+      
+                      waves="light"
+                      onClick={this.reset}
+                    >
+                    NEW GAME
+                    </Button>                
+                </div>
+            </div>    
     
             <div className="flexcontainer">
               
@@ -332,17 +349,15 @@ class TicTacToe extends React.Component {
                       </Row>
               </div>
               <div className="flexitemmid">
-                <img src={arrow} alt="Paris"  width="150px"></img>
+                <img src={arrow} alt="Paris"  width="90px"></img>
               </div>
               <div className="flexitemright"> 
                 <Brick  value={this.state.activeFigure} onTic={this.handleTic} heros={this.state.heros}/>
               </div>
             </div>      
-      </div>
-              
-    
-      <div className="panel">
-            
+
+
+
             <div className="label">
               Inventory
             </div>  
@@ -360,29 +375,16 @@ class TicTacToe extends React.Component {
                     </Row>
               </div>
             </div>
-            </div>        
+      </div>
+              
+       
 
 
 
 
 
 
-              <div style={{ position: 'relative', top:'550px'}}>        
-                <Button
-                  large
-                  node="a"
-                  style={{
-                    marginRight: '5px'
-                  }}
-                  waves="light"
-                  onClick={this.reset}
-                >
-                RESET
-                </Button>
-          
-              <div> score x : {this.state.xwins}</div>       
-              <div> score o : {this.state.owins}</div>     
-              </div>
+       
             </div>
       
       
