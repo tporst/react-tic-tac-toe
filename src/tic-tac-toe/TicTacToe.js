@@ -16,11 +16,11 @@ class Brick extends React.Component {
     super(props);
     this.onTic = this.onTic.bind(this); // always when you use a method as event handler callback you have to bind it, otherweise the this is lost  
   }    
-  onTic(x,y){
-    // tic only if the value is not set yet
-    if(!this.props.value){
+  onTic(e){
+    // tic only if the value is not set yet  
+    if(!this.props.value && !this.props.blocked){
 
-      this.props.onTic(this.props.x, this.props.y);
+      this.props.onTic(this.props.x, this.props.y, e);
     }
   } 
 
@@ -28,13 +28,11 @@ class Brick extends React.Component {
 
     let hero = this.props.value ? this.props.heros.get(this.props.value) : '';
 
-
-
     return(
       <div className="brick">        
         <div        
             className="hero"
-            onClick={this.onTic}
+            onClick={(e)=>this.onTic(e)}
         >       
           {hero}
           
@@ -59,6 +57,7 @@ class TicTacToe extends React.Component {
     this.state = {
       owins: 0,
       xwins:0,
+      blocked:false,
       heros:  new Map([
         ['x', <img  src={allHerosX[heroIndex]} alt="" className="hero" />],
         ['o', <img  src={allHerosY[heroIndex]}  alt="" className="hero" />]
@@ -74,6 +73,7 @@ class TicTacToe extends React.Component {
     this.handleTic = this.handleTic.bind(this);//js has no binding for class methods, so we have to do it otherweise the this context is lost when we call the method as callback in listner
     this.reset = this.reset.bind(this);
     this.getInventoryRow = this.getInventoryRow.bind(this);
+    this.autoTic =  this.autoTic.bind(this);
 
     
   }
@@ -103,14 +103,29 @@ class TicTacToe extends React.Component {
   incrementWin(){
 
   }
+  
+  async autoTic(x,y){
+    // perform auto move after some time
+    setTimeout(()=>{
+      // perform auto move
+      this.handleTic(x,y,false);
+      // unblock the normal player
+      this.setState((state, props)=>{
+          return {blocked: !state.blocked}
+        });
+    }, 700);
 
-  handleTic(x,y){
+    return 'tets autoTic';
+  }
+
+  handleTic(x,y, clickEvent){
+   
     //<img  src="minecraft.png"  alt="" className="hero" />
-
+   
     if(!this.state.gameOver){
         this.setState((state, props)=>{
         
-          let nextFigure = (state.activeFigure === 'x' ? 'o' : 'x');
+          let nextFigure = (this.state.activeFigure === 'x' ? 'o' : 'x');
           //is this state manipulation ok
           state.matrix[y][x] = state.activeFigure;
           let over = false;
@@ -142,7 +157,7 @@ class TicTacToe extends React.Component {
 
            
             document.querySelectorAll('.diagonalDown').forEach(elem =>  elem.querySelector('div').querySelector('div').className +=' winner');
-            console.log('evaluateTicCornedDown');
+            
             over = true;
           }
 
@@ -154,16 +169,24 @@ class TicTacToe extends React.Component {
             over = true;
           }
 
-        
-
           return{
             owins: (state.activeFigure === 'o' && over) ? state.owins+1 : state.owins,
             xwins: (state.activeFigure === 'x' && over) ? state.xwins+1 : state.xwins,
+            blocked:true, //block the move and wait on auto move
             matrix : state.matrix,
             activeFigure : nextFigure,
             gameOver : over
           }
         });
+
+        
+        if(clickEvent){
+          //do auto move only after click event
+          this.autoTic(x+1,y+1);
+          
+        }
+
+
       }      
   }  
 
@@ -199,8 +222,7 @@ class TicTacToe extends React.Component {
 
     let row = Array.from(Array(column).keys());
     let hero = this.state.heros.get(figure);
-    console.log('figure  '+figure);
-    console.log('hero  '+hero);
+
  
     let inventory = row.map(r=>{
       
@@ -268,7 +290,7 @@ class TicTacToe extends React.Component {
                           >
                             <div id='row0' className="diagonalDown">
                             <div id='column0' className="">
-                              <Brick  x={0} y={0} value={this.state.matrix[0][0]} onTic={this.handleTic} heros={this.state.heros} />
+                              <Brick  x={0} y={0} value={this.state.matrix[0][0]} blocked={this.state.blocked} onTic={this.handleTic} heros={this.state.heros} />
                             </div> 
                             </div>  
                           </Col>
@@ -278,7 +300,7 @@ class TicTacToe extends React.Component {
                           >
                               <div id='row0' className="">
                               <div id='column1' className="">
-                                <Brick x={1} y={0} value={this.state.matrix[0][1]} onTic={this.handleTic} heros={this.state.heros}/>
+                                <Brick x={1} y={0} value={this.state.matrix[0][1]} blocked={this.state.blocked}  onTic={this.handleTic} heros={this.state.heros}/>
                               </div>
                               </div>  
                           </Col>
@@ -288,7 +310,7 @@ class TicTacToe extends React.Component {
                           >
                             <div id='row0' className="">
                             <div id='column2' className="diagonalUp">
-                                <Brick x={2} y={0} value={this.state.matrix[0][2]} onTic={this.handleTic} heros={this.state.heros}/>
+                                <Brick x={2} y={0} value={this.state.matrix[0][2]} blocked={this.state.blocked}  onTic={this.handleTic} heros={this.state.heros}/>
                               </div>
                               </div>    
                           </Col>
@@ -302,7 +324,7 @@ class TicTacToe extends React.Component {
                           >
                             <div id='row1' className="">
                             <div id='column0' className="">
-                              <Brick x={0} y={1} value={this.state.matrix[1][0]} onTic={this.handleTic}  heros={this.state.heros}/>
+                              <Brick x={0} y={1} value={this.state.matrix[1][0]} blocked={this.state.blocked} onTic={this.handleTic}  heros={this.state.heros}/>
                             </div>
                             </div>
                           </Col>
@@ -312,7 +334,7 @@ class TicTacToe extends React.Component {
                           >
                             <div id='row1' className="diagonalDown">
                             <div id='column1' className="diagonalUp">
-                              <Brick x={1} y={1} value={this.state.matrix[1][1]} onTic={this.handleTic} heros={this.state.heros}/>
+                              <Brick x={1} y={1} value={this.state.matrix[1][1]} blocked={this.state.blocked}  onTic={this.handleTic} heros={this.state.heros}/>
                             </div>
                             </div>
                           </Col>
@@ -322,7 +344,7 @@ class TicTacToe extends React.Component {
                           >
                             <div id='row1' className="">
                             <div id='column2' className="">
-                              <Brick x={2} y={1} value={this.state.matrix[1][2]} onTic={this.handleTic} heros={this.state.heros}/>
+                              <Brick x={2} y={1} value={this.state.matrix[1][2]} blocked={this.state.blocked}  onTic={this.handleTic} heros={this.state.heros}/>
                             </div>
                             </div>
                           </Col>
@@ -336,7 +358,7 @@ class TicTacToe extends React.Component {
                               
                               <div id='row2' className="">
                               <div id='column0' className="diagonalUp">
-                                <Brick x={0} y={2} value={this.state.matrix[2][0]} onTic={this.handleTic} heros={this.state.heros}/>
+                                <Brick x={0} y={2} value={this.state.matrix[2][0]} blocked={this.state.blocked}  onTic={this.handleTic} heros={this.state.heros}/>
                               </div>
                               </div>
                           </Col>
@@ -346,7 +368,7 @@ class TicTacToe extends React.Component {
                           >
                             <div id='row2' className="">
                             <div id='column1' className="">
-                              <Brick x={1} y={2} value={this.state.matrix[2][1]} onTic={this.handleTic} heros={this.state.heros}/>
+                              <Brick x={1} y={2} value={this.state.matrix[2][1]} blocked={this.state.blocked}  onTic={this.handleTic} heros={this.state.heros}/>
                               </div>
                               </div>
                           </Col>
@@ -356,7 +378,7 @@ class TicTacToe extends React.Component {
                           >
                             <div id='row2' className="diagonalDown">
                             <div id='column2' className="">
-                                <Brick x={2} y={2} value={this.state.matrix[2][2]} onTic={this.handleTic} heros={this.state.heros}/>
+                                <Brick x={2} y={2} value={this.state.matrix[2][2]} blocked={this.state.blocked}  onTic={this.handleTic} heros={this.state.heros}/>
                             </div>
                             </div>
                           </Col>
