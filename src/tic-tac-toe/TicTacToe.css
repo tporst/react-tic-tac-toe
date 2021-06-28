@@ -41,7 +41,7 @@
 }
 
 .flexcontainer {
-  width: 50%;
+  width: 98%;
   display: flex;
   flex-direction: row;
   font-size: 30px;
@@ -66,7 +66,19 @@
    margin-bottom: auto;
   margin-top: auto;
   padding: 3px;
-  flex: 40%;
+  flex: 15%;
+}
+.flexitemrightOuter {
+  
+  margin-bottom: auto;
+ margin-top: auto;
+ padding: 3px;
+ flex: 25%;
+}
+
+.gif{
+
+  width: 100%;
 }
 
 .label{

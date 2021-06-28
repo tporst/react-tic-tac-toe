@@ -26,6 +26,7 @@ class Brick extends React.Component {
 
   render(){
     let hero = this.props.value ? this.props.heros.get(this.props.value) : '';
+    hero = this.props.gameOver ?  <img src={`winner${this.props.gifIndex}.gif`} alt="Paris" style={{maxWidth: '100%', height: '100%'}}></img> : hero;
     return(
       <div className="brick">        
         <div        
@@ -53,6 +54,7 @@ class TicTacToe extends React.Component {
     this.state = {
       owins: 0, //score counter
       xwins:0,
+      gifIndex:1,
       blocked:false, //bloking the click event if oponen is doing a move
       heros:  new Map([
         ['x', <img  src={allHerosX[heroIndex]} alt="" className="hero" />],
@@ -359,6 +361,7 @@ calculateBestMove(){
             blocked:true, //block the move and wait on auto move
             matrix : prevState.matrix,
             activeFigure : nextFigure,
+            gifIndex : Math.floor(Math.random() * 14),
             gameOver : this.gameOver(prevState.matrix) || winner
           }
         });
@@ -423,13 +426,20 @@ calculateBestMove(){
 
                     </div></div>
                 </Col>;
-    return inventory;
+
+
+
+  
+
+
+      return inventory;
 }
 
   //the UI of the GAME
   render() {
     
     const cSize=0.1;
+   
    
     return (
     
@@ -481,7 +491,7 @@ calculateBestMove(){
                           >
                               <div id='row0' className="">
                               <div id='column1' className="">
-                                <Brick x={1} y={0} value={this.state.matrix[0][1]} blocked={this.state.blocked}  onTic={this.handleTic} heros={this.state.heros}/>
+                                <Brick x={1} y={0} value={this.state.matrix[0][1]} blocked={this.state.blocked}  onTic={this.handleTic} heros={this.state.heros}  />
                               </div>
                               </div>  
                           </Col>
@@ -491,7 +501,7 @@ calculateBestMove(){
                           >
                             <div id='row0' className="">
                             <div id='column2' className="diagonalUp">
-                                <Brick x={2} y={0} value={this.state.matrix[0][2]} blocked={this.state.blocked}  onTic={this.handleTic} heros={this.state.heros}/>
+                                <Brick x={2} y={0} value={this.state.matrix[0][2]} blocked={this.state.blocked}  onTic={this.handleTic} heros={this.state.heros} />
                               </div>
                               </div>    
                           </Col>
@@ -505,7 +515,7 @@ calculateBestMove(){
                           >
                             <div id='row1' className="">
                             <div id='column0' className="">
-                              <Brick x={0} y={1} value={this.state.matrix[1][0]} blocked={this.state.blocked} onTic={this.handleTic}  heros={this.state.heros}/>
+                              <Brick x={0} y={1} value={this.state.matrix[1][0]} blocked={this.state.blocked} onTic={this.handleTic}  heros={this.state.heros}   />
                             </div>
                             </div>
                           </Col>
@@ -515,7 +525,7 @@ calculateBestMove(){
                           >
                             <div id='row1' className="diagonalDown">
                             <div id='column1' className="diagonalUp">
-                              <Brick x={1} y={1} value={this.state.matrix[1][1]} blocked={this.state.blocked}  onTic={this.handleTic} heros={this.state.heros}/>
+                              <Brick x={1} y={1} value={this.state.matrix[1][1]} blocked={this.state.blocked}  onTic={this.handleTic} heros={this.state.heros}  />
                             </div>
                             </div>
                           </Col>
@@ -525,7 +535,7 @@ calculateBestMove(){
                           >
                             <div id='row1' className="">
                             <div id='column2' className="">
-                              <Brick x={2} y={1} value={this.state.matrix[1][2]} blocked={this.state.blocked}  onTic={this.handleTic} heros={this.state.heros}/>
+                              <Brick x={2} y={1} value={this.state.matrix[1][2]} blocked={this.state.blocked}  onTic={this.handleTic} heros={this.state.heros}  />
                             </div>
                             </div>
                           </Col>
@@ -539,7 +549,7 @@ calculateBestMove(){
                               
                               <div id='row2' className="">
                               <div id='column0' className="diagonalUp">
-                                <Brick x={0} y={2} value={this.state.matrix[2][0]} blocked={this.state.blocked}  onTic={this.handleTic} heros={this.state.heros}/>
+                                <Brick x={0} y={2} value={this.state.matrix[2][0]} blocked={this.state.blocked}  onTic={this.handleTic} heros={this.state.heros}  />
                               </div>
                               </div>
                           </Col>
@@ -549,7 +559,7 @@ calculateBestMove(){
                           >
                             <div id='row2' className="">
                             <div id='column1' className="">
-                              <Brick x={1} y={2} value={this.state.matrix[2][1]} blocked={this.state.blocked}  onTic={this.handleTic} heros={this.state.heros}/>
+                              <Brick x={1} y={2} value={this.state.matrix[2][1]} blocked={this.state.blocked}  onTic={this.handleTic} heros={this.state.heros}  />
                               </div>
                               </div>
                           </Col>
@@ -559,7 +569,7 @@ calculateBestMove(){
                           >
                             <div id='row2' className="diagonalDown">
                             <div id='column2' className="">
-                                <Brick x={2} y={2} value={this.state.matrix[2][2]} blocked={this.state.blocked}  onTic={this.handleTic} heros={this.state.heros}/>
+                                <Brick x={2} y={2} value={this.state.matrix[2][2]} blocked={this.state.blocked}  onTic={this.handleTic} heros={this.state.heros}  />
                             </div>
                             </div>
                           </Col>
@@ -569,7 +579,10 @@ calculateBestMove(){
                 <img src={arrow} alt="Paris"  width="90px"></img>
               </div>
               <div className="flexitemright"> 
-                <Brick  value={this.state.activeFigure} onTic={this.handleTic} heros={this.state.heros}/>
+                <Brick  value={this.state.activeFigure} onTic={this.handleTic} heros={this.state.heros} gameOver={this.state.gameOver} gifIndex={this.state.gifIndex}/>
+              </div>
+              <div className="flexitemrightOuter"> 
+              
               </div>
             </div>      
 
