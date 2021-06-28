@@ -361,7 +361,7 @@ calculateBestMove(){
             blocked:true, //block the move and wait on auto move
             matrix : prevState.matrix,
             activeFigure : nextFigure,
-            gifIndex : Math.floor(Math.random() * 14),
+            gifIndex : Math.floor(Math.random() * 34),
             gameOver : this.gameOver(prevState.matrix) || winner
           }
         });
