@@ -7,18 +7,12 @@ import { Navbar,Tabs,Tab ,Icon,NavItem} from 'react-materialize';
 import TicTacToe from './tic-tac-toe/TicTacToe.js';
 // functional component alternativ you can use the class component 
 function App() {
-  
-  const numbers = [1, 2, 3, 4, 5];
-  const listItems = numbers.map((number) =>
-  <li>{number}</li>
-);
-  
+   
   return (
 
-
     <div className="App">
-       <h1>Tic Tac Minecraft</h1>      
-       <div className="TicTacToe">
+       <h1>Tic Tac Minecraft</h1>       
+       <div className="">
          <TicTacToe />
        </div>
       
