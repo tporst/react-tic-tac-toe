@@ -220,6 +220,77 @@ calculateBestMove(){
     }
   }
 
+
+
+    // clone matrix for DiagonalDown0 evaluation
+    let copyMatrixDiagonalDown=this.matrixClone();
+    //calculate next move ranking for all possible moves placed in columns
+   // for(let rowIndex=0; rowIndex<=2; rowIndex++){
+      let column=[];
+      //extract column as array
+      let j=0;
+      copyMatrixDiagonalDown.forEach(row =>{
+
+        column.push(row[j]);
+        j++;
+      });
+  
+      if(this.movesDone(column)===2){
+        
+        for(let i=0; i<=2; i++){
+          if(column[i] !== 'x' && column[i] !== 'o'){       
+            //check if possible to win for auto player        
+            column[i]=this.state.activeFigure;
+            if(this.evaluateTicRow(column, this.state.activeFigure)){    
+              //move to win
+              moves.set(100,  [i,i] );
+            }
+           
+            // check if possible to win for oponent
+            let nextFigure = (this.state.activeFigure === 'x' ? 'o' : 'x');
+            column[i]=nextFigure;            
+            if(this.evaluateTicRow(column, nextFigure)){
+            //move to block opponent
+              moves.set(-100, [i,i] );
+            }
+          }   
+        }
+      }
+    //}
+
+    //clone matrix for DiagonalUp evaluation
+    let copyMatrixDiagonalUp=this.matrixClone();
+    let columnDiagonalUp=[];
+    let jj=2;
+    copyMatrixDiagonalUp.forEach(row =>{
+      columnDiagonalUp.push(row[jj]);
+      jj--;         
+    });
+     
+    if(this.movesDone(columnDiagonalUp)===2){
+           
+      for(let i=0; i<=2; i++){
+        if(columnDiagonalUp[i] !== 'x' && columnDiagonalUp[i] !== 'o'){       
+          //check if possible to win for auto player        
+          columnDiagonalUp[i]=this.state.activeFigure;
+               if(this.evaluateTicRow(columnDiagonalUp, this.state.activeFigure)){    
+                 //move to win
+                 moves.set(100,  [2-i,i] );
+               }
+              
+               // check if possible to win for oponent
+               let nextFigure = (this.state.activeFigure === 'x' ? 'o' : 'x');
+               columnDiagonalUp[i]=nextFigure;            
+               if(this.evaluateTicRow(columnDiagonalUp, nextFigure)){
+               //move to block opponent
+                 moves.set(-100, [2-i,i] );
+               }
+             }   
+           }
+         }
+
+
+
  //after ranging all posible moves
  if(moves.get(100).length>0){
     //move to win 
@@ -237,7 +308,7 @@ calculateBestMove(){
   handleTic(x,y, clickEvent){
 
 
-    if(!this.state.gameOver){
+    if(!this.state.gameOver ){
         
         let winner = false;
 
@@ -288,7 +359,7 @@ calculateBestMove(){
             blocked:true, //block the move and wait on auto move
             matrix : prevState.matrix,
             activeFigure : nextFigure,
-            gameOver : this.gameOver(prevState.matrix)
+            gameOver : this.gameOver(prevState.matrix) || winner
           }
         });
 
