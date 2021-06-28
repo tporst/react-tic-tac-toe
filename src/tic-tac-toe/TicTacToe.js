@@ -98,6 +98,8 @@ async autoTic(){
     
   
     // perform auto move after some time
+    document.querySelector('#activePlayer').className +=' animatedBorder';
+
     setTimeout(()=>{
      
       //calculate best position
@@ -106,6 +108,9 @@ async autoTic(){
       this.handleTic(x,y,false);
       //unblock the oposite player
       this.setState((state, props)=>{
+         let cls  = document.querySelector('#activePlayer').className.replaceAll(' animatedBorder','');
+         document.querySelector('#activePlayer').className =cls;
+
           return {blocked: !state.blocked}
         });
       
@@ -578,7 +583,7 @@ calculateBestMove(){
               <div className="flexitemmid">
                 <img src={arrow} alt="Paris"  width="90px"></img>
               </div>
-              <div className="flexitemright"> 
+              <div className="flexitemright" id="activePlayer"> 
                 <Brick  value={this.state.activeFigure} onTic={this.handleTic} heros={this.state.heros} gameOver={this.state.gameOver} gifIndex={this.state.gifIndex}/>
               </div>
               <div className="flexitemrightOuter"> 
