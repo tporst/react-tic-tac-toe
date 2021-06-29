@@ -477,7 +477,7 @@ calculateBestMove(){
     
             <div className="flexcontainer">
               
-              <div className="flexitemleft">
+              <div className="flexitemleft cursor">
                       <Row >
                         <Col 
                         
@@ -581,7 +581,7 @@ calculateBestMove(){
                       </Row>
               </div>
               <div className="flexitemmid">
-                <img src={arrow} alt="Paris"  width="90px"></img>
+                <img src={arrow} alt="Paris"  ></img>
               </div>
               <div className="flexitemright" id="activePlayer"> 
                 <Brick  value={this.state.activeFigure} onTic={this.handleTic} heros={this.state.heros} gameOver={this.state.gameOver} gifIndex={this.state.gifIndex}/>

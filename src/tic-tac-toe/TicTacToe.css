@@ -10,7 +10,11 @@
   border-top-color: #020202;
   border-left: 5px solid #020202;
   border-right: 5px solid rgb(253, 253, 253);
-  border-bottom-color: rgb(253, 253, 253);;
+  border-bottom-color: rgb(253, 253, 253);
+  
+}
+.cursor{
+  cursor: crosshair;
 }
 
 .row .col {
@@ -110,6 +114,38 @@ body {
 
 .winner {
   border-left: 5px solid rgb(218, 18, 18);
+
+}
+img{width:90px}
+
+@media only screen and (max-width: 645px) {
+  .label{
+    text-align: left;
+    margin-bottom: 10px;
+    padding: 0px;
+    font-size: 15px;
+    
+  }
+  .console{
+
+    width : 330px; 
+  
+  }
+
+  .row {
+    margin-bottom: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+    width:150px;
+  }
+
+  .hero {
+    background-color: rgb(134, 134, 134);
+    width:35px;
+    height:35px;
+  }
+  img{width:40px}
+
 
 }
 

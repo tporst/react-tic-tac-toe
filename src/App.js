@@ -6,7 +6,7 @@ import TicTacToe from './tic-tac-toe/TicTacToe.js';
 function App() {
   return (
     <div className="App">
-       <h1>Tic Tac Minecraft</h1>       
+       <div className="header">Tic Tac Minecraft</div>       
        <div className="">
          <TicTacToe />
        </div>     
