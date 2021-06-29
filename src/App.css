@@ -10,6 +10,7 @@ body, html {
 
 }
 .App {
+  overflow-x: hidden;
   overflow-y: hidden;
   text-align: center;
   background-image: url("bg3.png"); /* The image used */
