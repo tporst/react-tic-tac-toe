@@ -1,4 +1,6 @@
-# Getting Started with Create React App
+# Getting Started with Tic-Tac-Minecraft App
+
+Tic-Tac-Minecraft is a single player online Tic Tac Toe Minecraft Themed Game for children.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
