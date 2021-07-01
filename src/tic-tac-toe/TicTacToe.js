@@ -5,19 +5,18 @@ import './TicTacToe.css';
 import { Button, Row, Col } from 'react-materialize';
 import NotificationBadge from 'react-notification-badge';
 import {Effect} from 'react-notification-badge';
-import background from "./background.png";
 import arrow from "./arrow.png";
 
-//component representing a single brick on the toc tac toe borad
+//component representing a single brick on the tic tac toe board
 class Brick extends React.Component {
 
   constructor(props) {
     super(props);
-    this.onTic = this.onTic.bind(this); // always when you use a method as event handler callback you have to bind it, otherweise the this is lost  
+    this.onTic = this.onTic.bind(this); // always when you use a method as event handler callback you have to bind it, otherwise the this is lost  
   }    
-  // this onClick handler is liftig up the state to the main component
+  // this onClick handler is lifting up the state to the main component
   onTic(e){
-    // tic only if the value is not set yet  
+    // tic only if the value is not set yet  and if opponent is not blocking the move
     if(!this.props.value && !this.props.blocked){
   
       this.props.onTic(this.props.x, this.props.y, e);
@@ -40,9 +39,7 @@ class Brick extends React.Component {
   }
 }
 
-
-
-//class componennt
+//class 
 class TicTacToe extends React.Component {
 
   constructor(props) {
@@ -55,7 +52,7 @@ class TicTacToe extends React.Component {
       owins: 0, //score counter
       xwins:0,
       gifIndex:1,
-      blocked:false, //bloking the click event if oponen is doing a move
+      blocked:false, //blocking the click event if opponent is doing a move
       heros:  new Map([
         ['x', <img  src={allHerosX[heroIndex]} alt="" className="hero" />],
         ['o', <img  src={allHerosY[heroIndex]}  alt="" className="hero" />]
@@ -68,7 +65,7 @@ class TicTacToe extends React.Component {
       gameOver:false
     };
 
-    this.handleTic = this.handleTic.bind(this);//js has no binding for class methods, so we have to do it otherweise the this context is lost when we call the method as callback in listner
+    this.handleTic = this.handleTic.bind(this);//js has no binding for class methods, so we have to do it otherwise the this context is lost when we call the method as callback in listner
     this.reset = this.reset.bind(this);
     this.getInventoryRow = this.getInventoryRow.bind(this);
     this.autoTic =  this.autoTic.bind(this);
@@ -82,7 +79,7 @@ reset(){
         }); 
       document.querySelectorAll('#column'+x).forEach(elem => elem.querySelector('div').querySelector('div').className = elem.querySelector('div').querySelector('div').className.replaceAll(" winner", "")); 
     }
-    
+
     this.setState({
       activeFigure: 'o',
       matrix:[[],
@@ -90,33 +87,25 @@ reset(){
               []],
       gameOver:false
     });
-
   }
 
-//asynchron move, done by auto player
-async autoTic(){ 
-    
-  
-    // perform auto move after some time
-    document.querySelector('#activePlayer').className +=' animatedBorder';
-
-    setTimeout(()=>{
-     
-      //calculate best position
-      let [x,y] = this.calculateBestMove();
-      //perform auto move
-      this.handleTic(x,y,false);
-      //unblock the oposite player
-      this.setState((state, props)=>{
-         let cls  = document.querySelector('#activePlayer').className.replaceAll(' animatedBorder','');
-         document.querySelector('#activePlayer').className =cls;
-
-          return {blocked: !state.blocked}
-        });
-      
+//asynch move, done by auto player
+async autoTic(){    
+  document.querySelector('#activePlayer').className +=' animatedBorder';
+  //perform auto move after some time
+  setTimeout(()=>{
+    //calculate best position
+    let [x,y] = this.calculateBestMove();
+    //perform auto move
+    this.handleTic(x,y,false);
+    //unblock the opposite player
+    this.setState((state, props)=>{
+        let cls  = document.querySelector('#activePlayer').className.replaceAll(' animatedBorder','');
+        document.querySelector('#activePlayer').className =cls;
+        return {blocked: !state.blocked}
+      });    
     }, 600);
-
-    return 'autoTic';
+  return 'autoTic';
 }
 
 //deep colone of move matrix
@@ -128,8 +117,8 @@ matrixClone(){
 
   return copyMatrixRows;
 }
-//filter all dirtty values from state like 'undefined' etc. 
-//these values are automaticly created by js when we inserting into empty array in other than 1 position
+//filter all dirty values from state like 'undefined' etc. 
+//these values are automatically created by js when we inserting into empty array in other than 1 position
 movesDone(row){
   return  row.filter(e=>e ==='o' || e ==='x').length;
 }
@@ -141,11 +130,9 @@ gameOver(matrix){
   return reduced === 9;
 }
 
-
-
 calculateBestMove(){
   //next move ranking map
-  //always take 100 when not availabe then -100 else 0
+  //always take 100 when not available then -100 else 0
    let moves=  new Map([
     [100, []],
     [0, []],
@@ -168,14 +155,13 @@ calculateBestMove(){
               //move to win
               moves.set(100, [i,rowIndex] );
             }
-            // check if possible to win for oponent
+            // check if possible to win for opponent
             let nextFigure = (this.state.activeFigure === 'x' ? 'o' : 'x');
             row[i]=nextFigure;
               
             if(this.evaluateTicRow(row, nextFigure)){
               //block opponent winning move
-              moves.set(-100, [i,rowIndex] );
-              console.log('step2: i should block');           
+              moves.set(-100, [i,rowIndex] );         
             }            
 
             //no deciding move can be done
@@ -185,7 +171,7 @@ calculateBestMove(){
 
           }     
       }
-      //only 1 or no moves done in the row, the next move doesnt metter 
+      //only 1 or no moves done in the row, the next move does mot metter 
       //but we can improve the algorithm, to check hier the over next move
      // if((moves.get(100).length<1 && moves.get(-100).length<1)){
       else if(row[i] !== 'x' && row[i] !== 'o'){
@@ -215,7 +201,7 @@ calculateBestMove(){
             moves.set(100,  [rowIndex,i] );
           }
          
-          // check if possible to win for oponent
+          // check if possible to win for opponent
           let nextFigure = (this.state.activeFigure === 'x' ? 'o' : 'x');
           column[i]=nextFigure;            
           if(this.evaluateTicRow(column, nextFigure)){
@@ -227,43 +213,39 @@ calculateBestMove(){
     }
   }
 
-
-
     // clone matrix for DiagonalDown0 evaluation
     let copyMatrixDiagonalDown=this.matrixClone();
     //calculate next move ranking for all possible moves placed in columns
-   // for(let rowIndex=0; rowIndex<=2; rowIndex++){
-      let column=[];
-      //extract column as array
-      let j=0;
-      copyMatrixDiagonalDown.forEach(row =>{
-
-        column.push(row[j]);
-        j++;
-      });
+    let column=[];
+    //extract column as array
+    let j=0;
+    copyMatrixDiagonalDown.forEach(row =>{
+      column.push(row[j]);
+      j++;
+    });
   
-      if(this.movesDone(column)===2){
+    if(this.movesDone(column)===2){
         
-        for(let i=0; i<=2; i++){
-          if(column[i] !== 'x' && column[i] !== 'o'){       
-            //check if possible to win for auto player        
-            column[i]=this.state.activeFigure;
-            if(this.evaluateTicRow(column, this.state.activeFigure)){    
-              //move to win
-              moves.set(100,  [i,i] );
-            }
-           
-            // check if possible to win for oponent
-            let nextFigure = (this.state.activeFigure === 'x' ? 'o' : 'x');
-            column[i]=nextFigure;            
-            if(this.evaluateTicRow(column, nextFigure)){
-            //move to block opponent
-              moves.set(-100, [i,i] );
-            }
-          }   
-        }
+      for(let i=0; i<=2; i++){
+        if(column[i] !== 'x' && column[i] !== 'o'){       
+          //check if possible to win for auto player        
+          column[i]=this.state.activeFigure;
+          if(this.evaluateTicRow(column, this.state.activeFigure)){    
+            //move to win
+            moves.set(100,  [i,i] );
+          }
+        
+          // check if possible to win for opponent
+          let nextFigure = (this.state.activeFigure === 'x' ? 'o' : 'x');
+          column[i]=nextFigure;            
+          if(this.evaluateTicRow(column, nextFigure)){
+          //move to block opponent
+            moves.set(-100, [i,i] );
+          }
+        }   
       }
-    //}
+    }
+
 
     //clone matrix for DiagonalUp evaluation
     let copyMatrixDiagonalUp=this.matrixClone();
@@ -285,7 +267,7 @@ calculateBestMove(){
                  moves.set(100,  [2-i,i] );
                }
               
-               // check if possible to win for oponent
+               // check if possible to win for opponent
                let nextFigure = (this.state.activeFigure === 'x' ? 'o' : 'x');
                columnDiagonalUp[i]=nextFigure;            
                if(this.evaluateTicRow(columnDiagonalUp, nextFigure)){
@@ -296,9 +278,7 @@ calculateBestMove(){
            }
          }
 
-
-
- //after ranging all posible moves
+ //after ranging all possible moves
  if(moves.get(100).length>0){
     //move to win 
     return moves.get(100);
@@ -313,8 +293,7 @@ calculateBestMove(){
 }
 
   handleTic(x,y, clickEvent){
-
-
+  
     if(!this.state.gameOver ){
         
         let winner = false;
@@ -324,17 +303,11 @@ calculateBestMove(){
           let nextFigure = (prevState.activeFigure === 'x' ? 'o' : 'x');
           //is this state manipulation ok
           prevState.matrix[y][x] = prevState.activeFigure;        
-          
-
           // evaluate if the click was a winning click and show it in UI accordingly 
           if(this.evaluateTicRow(prevState.matrix[y], prevState.activeFigure)){
 
-            document.querySelectorAll('#row'+y).forEach(elem =>  {
-             
-               elem.querySelector('div').querySelector('div').className +=' winner';          
-          });
-
-          winner = true;
+            document.querySelectorAll('#row'+y).forEach(elem => {elem.querySelector('div').querySelector('div').className +=' winner';});
+            winner = true;
           }
 
           if(this.evaluateTicColumn(prevState.matrix, x, prevState.activeFigure)){
@@ -343,22 +316,16 @@ calculateBestMove(){
             winner = true;
           }
           if(this.evaluateTicCornedDown(prevState.matrix, prevState.activeFigure)){
-
            
-            document.querySelectorAll('.diagonalDown').forEach(elem =>  elem.querySelector('div').querySelector('div').className +=' winner');
-            
+            document.querySelectorAll('.diagonalDown').forEach(elem =>  elem.querySelector('div').querySelector('div').className +=' winner');            
             winner = true;
           }
 
           if(this.evaluateTicCornedUp(prevState.matrix, prevState.activeFigure)){
-
            
-            document.querySelectorAll('.diagonalUp').forEach(elem =>  elem.querySelector('div').querySelector('div').className +=' winner');
-         
+            document.querySelectorAll('.diagonalUp').forEach(elem =>  elem.querySelector('div').querySelector('div').className +=' winner');         
             winner = true;
           }
-
-          
          
           return{
             owins: (prevState.activeFigure === 'o' && winner) ? prevState.owins+1 : prevState.owins,
@@ -432,11 +399,6 @@ calculateBestMove(){
                     </div></div>
                 </Col>;
 
-
-
-  
-
-
       return inventory;
 }
 
@@ -444,17 +406,29 @@ calculateBestMove(){
   render() {
     
     const cSize=0.1;
-   
+    let ticTacToeMainBoard=[];
+    //create rows
+    for(let i=0; i <= 2; i++){
+      let row=[];  
+      //create columns
+      for(let j=0; j<=2; j++){
+
+        row.push(<Col className="" s={cSize}>
+                    <div id={'row'+i} className="diagonalDown">
+                      <div id={'column'+j} className="">
+                        <Brick  x={j} y={i} value={this.state.matrix[i][j]} blocked={this.state.blocked} onTic={this.handleTic} heros={this.state.heros} />
+                      </div> 
+                    </div>  
+                  </Col>)}
+
+      ticTacToeMainBoard.push(<Row>{row}</Row>);
+    }
    
     return (
     
     <div className="container console" >
-      
-       
-
       <div className="panel ">
-           
-           
+
             <div className="flexcontainer" style={{width: '98%'}}>
                 <div className="label flexitemleft">
                   Crafting
@@ -474,111 +448,10 @@ calculateBestMove(){
                     </Button>                
                 </div>
             </div>    
-    
             <div className="flexcontainer">
-              
               <div className="flexitemleft cursor">
-                      <Row >
-                        <Col 
-                        
-                            className=""
-                            s={cSize}
-                          >
-                            <div id='row0' className="diagonalDown">
-                            <div id='column0' className="">
-                              <Brick  x={0} y={0} value={this.state.matrix[0][0]} blocked={this.state.blocked} onTic={this.handleTic} heros={this.state.heros} />
-                            </div> 
-                            </div>  
-                          </Col>
-                          <Col
-                            className=""
-                            s={cSize}
-                          >
-                              <div id='row0' className="">
-                              <div id='column1' className="">
-                                <Brick x={1} y={0} value={this.state.matrix[0][1]} blocked={this.state.blocked}  onTic={this.handleTic} heros={this.state.heros}  />
-                              </div>
-                              </div>  
-                          </Col>
-                          <Col
-                            className=""
-                            s={cSize}
-                          >
-                            <div id='row0' className="">
-                            <div id='column2' className="diagonalUp">
-                                <Brick x={2} y={0} value={this.state.matrix[0][2]} blocked={this.state.blocked}  onTic={this.handleTic} heros={this.state.heros} />
-                              </div>
-                              </div>    
-                          </Col>
-                      </Row>
-
-                      <Row>
-
-                          <Col
-                            className=""
-                            s={cSize}
-                          >
-                            <div id='row1' className="">
-                            <div id='column0' className="">
-                              <Brick x={0} y={1} value={this.state.matrix[1][0]} blocked={this.state.blocked} onTic={this.handleTic}  heros={this.state.heros}   />
-                            </div>
-                            </div>
-                          </Col>
-                          <Col
-                            className=""
-                            s={cSize}
-                          >
-                            <div id='row1' className="diagonalDown">
-                            <div id='column1' className="diagonalUp">
-                              <Brick x={1} y={1} value={this.state.matrix[1][1]} blocked={this.state.blocked}  onTic={this.handleTic} heros={this.state.heros}  />
-                            </div>
-                            </div>
-                          </Col>
-                          <Col
-                            className=""
-                            s={cSize}
-                          >
-                            <div id='row1' className="">
-                            <div id='column2' className="">
-                              <Brick x={2} y={1} value={this.state.matrix[1][2]} blocked={this.state.blocked}  onTic={this.handleTic} heros={this.state.heros}  />
-                            </div>
-                            </div>
-                          </Col>
-                      </Row>              
-
-                      <Row>
-                          <Col
-                            className=""
-                            s={cSize}
-                          >
-                              
-                              <div id='row2' className="">
-                              <div id='column0' className="diagonalUp">
-                                <Brick x={0} y={2} value={this.state.matrix[2][0]} blocked={this.state.blocked}  onTic={this.handleTic} heros={this.state.heros}  />
-                              </div>
-                              </div>
-                          </Col>
-                          <Col
-                            className=""
-                            s={cSize}
-                          >
-                            <div id='row2' className="">
-                            <div id='column1' className="">
-                              <Brick x={1} y={2} value={this.state.matrix[2][1]} blocked={this.state.blocked}  onTic={this.handleTic} heros={this.state.heros}  />
-                              </div>
-                              </div>
-                          </Col>
-                          <Col
-                            className=""
-                            s={cSize}
-                          >
-                            <div id='row2' className="diagonalDown">
-                            <div id='column2' className="">
-                                <Brick x={2} y={2} value={this.state.matrix[2][2]} blocked={this.state.blocked}  onTic={this.handleTic} heros={this.state.heros}  />
-                            </div>
-                            </div>
-                          </Col>
-                      </Row>
+                {/* generated above */}              
+                {ticTacToeMainBoard}
               </div>
               <div className="flexitemmid">
                 <img src={arrow} alt="Paris"  ></img>
@@ -587,44 +460,24 @@ calculateBestMove(){
                 <Brick  value={this.state.activeFigure} onTic={this.handleTic} heros={this.state.heros} gameOver={this.state.gameOver} gifIndex={this.state.gifIndex}/>
               </div>
               <div className="flexitemrightOuter"> 
-              
               </div>
             </div>      
-
-
-
             <div className="label">
               Inventory
             </div>  
             <div className="flexitemleft">
-              <div className="">
-              
-            {/*         <Row style={{width:'700px'}}>
-                      {this.getInventoryRow(7, cSize, 'x')}
-                    </Row> */}
-                    <Row style={{width:'700px'}}>
-                      {this.getInventoryRow(7, cSize, 'o')}
-                    </Row>
-                    <Row style={{width:'700px'}}>
-                      {this.getInventoryRow(7, cSize, 'x')}
-                    </Row>
+              <div className="">     
+                <Row style={{width:'700px'}}>
+                  {this.getInventoryRow(7, cSize, 'o')}
+                </Row>
+                <Row style={{width:'700px'}}>
+                  {this.getInventoryRow(7, cSize, 'x')}
+                </Row>
               </div>
             </div>
-      </div>
-              
-       
-
-
-
-
-
-
-       
-            </div>
-      
-      
-      
-      );
+      </div>          
+    </div>
+    );
   }
 }
 
